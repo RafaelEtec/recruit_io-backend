@@ -1,0 +1,15 @@
+import express from "express";
+import cors from "cors";
+import perguntas from "./routes/perguntas.js";
+import respostas from "./routes/respostas.js";
+import analisar from "./routes/analisar.js";
+
+export const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.get("/health", (_req, res) => res.json({ ok: true }));
+
+app.use("/api/perguntas", perguntas);
+app.use("/api/respostas", respostas);
+app.use("/api/analisar", analisar);
