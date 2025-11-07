@@ -2,7 +2,7 @@
   "name": "recruit_io-backend",
   "version": "0.1.0",
   "description": "Projeto Backend do Recruit.io - Grupo 1 - SENAC Pós graduação",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "dev": "tsx src/server.js",
     "build": "tsc",
@@ -15,7 +15,7 @@
   "keywords": [],
   "author": "Grupo 1",
   "license": "ISC",
-  "type": "module",
+  "type": "commonjs",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@huggingface/inference": "^4.13.1",
