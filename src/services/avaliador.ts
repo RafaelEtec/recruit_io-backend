@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { rodarAnalise } from "../providers/index";
 import { RUBRICA_SISTEMA, montarPromptUsuario } from "../prompts/rubrica";
-import { ResultadoAnalise } from "../tipos";
+import { ResultadoAnalise, Criterio } from "../tipos";
 
 const prisma = new PrismaClient();
 
@@ -59,7 +59,7 @@ export async function analisarResposta(
     console.warn("⚠️ JSON retornado incompleto, ajustando formato padrão...");
     parsed = {
       overall: parsed.overall ?? 0,
-      scores: parsed.scores ?? {},
+      scores: (parsed.scores ?? {}) as Record<Criterio, number>,
       labels: parsed.labels ?? {},
       notes: parsed.notes ?? ["Formato não conforme especificação original."]
     };

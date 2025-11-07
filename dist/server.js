@@ -1,6 +1,8 @@
-import "dotenv/config";
-import { app } from "./app.js";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("dotenv/config");
+const app_js_1 = require("./app.js");
 const PORT = Number(process.env.PORT || 3000);
-app.listen(PORT, () => {
+app_js_1.app.listen(PORT, () => {
     console.log(`Recruit.io API (PT-BR) rodando na porta ${PORT}`);
 });
