@@ -26,4 +26,7 @@ router.post("/", async (req, res) => {
         res.status(400).json({ erro: e.message });
     }
 });
+router.get("/criterios", (_req, res) => {
+    res.json(criteriosEnum);
+});
 export default router;
