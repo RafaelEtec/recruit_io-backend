@@ -24,11 +24,19 @@ router.post("/", async (req, res) => {
   const dados = schema.parse(req.body);
 
   try {
-    const resultado = await analisarResposta(dados.respostaId, dados.criterios, dados.contextoPergunta);
+    const resultado = await analisarResposta(
+      dados.respostaId,
+      dados.criterios,
+      dados.contextoPergunta
+    );
     res.json(resultado);
   } catch (e: any) {
     res.status(400).json({ erro: e.message });
   }
+});
+
+router.get("/criterios", (_req, res) => {
+  res.json(criteriosEnum);
 });
 
 export default router;
