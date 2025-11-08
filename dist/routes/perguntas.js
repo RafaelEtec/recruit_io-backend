@@ -1,14 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const client_1 = require("@prisma/client");
-const zod_1 = require("zod");
-const prisma = new client_1.PrismaClient();
-const router = (0, express_1.Router)();
+import { Router } from "express";
+import { PrismaClient } from "@prisma/client";
+import { z } from "zod";
+const prisma = new PrismaClient();
+const router = Router();
 router.post("/", async (req, res) => {
-    const schema = zod_1.z.object({
-        texto: zod_1.z.string().min(5),
-        tags: zod_1.z.array(zod_1.z.string()).optional()
+    const schema = z.object({
+        texto: z.string().min(5),
+        tags: z.array(z.string()).optional()
     });
     const dados = schema.parse(req.body);
     const pergunta = await prisma.pergunta.create({
@@ -22,4 +20,4 @@ router.get("/", async (_req, res) => {
     });
     res.json(lista);
 });
-exports.default = router;
+export default router;

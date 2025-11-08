@@ -1,19 +1,16 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.analisarResposta = analisarResposta;
-const client_1 = require("@prisma/client");
-const index_1 = require("../providers/index");
-const rubrica_1 = require("../prompts/rubrica");
-const prisma = new client_1.PrismaClient();
-async function analisarResposta(respostaId, criterios, contextoPergunta) {
+import { PrismaClient } from "@prisma/client";
+import { rodarAnalise } from "../providers/index";
+import { RUBRICA_SISTEMA, montarPromptUsuario } from "../prompts/rubrica";
+const prisma = new PrismaClient();
+export async function analisarResposta(respostaId, criterios, contextoPergunta) {
     const resposta = await prisma.resposta.findUnique({
         where: { id: respostaId },
         include: { pergunta: true }
     });
     if (!resposta)
         throw new Error("Resposta não encontrada");
-    const userPrompt = (0, rubrica_1.montarPromptUsuario)(resposta.resposta, criterios, contextoPergunta);
-    const bruto = await (0, index_1.rodarAnalise)(rubrica_1.RUBRICA_SISTEMA, userPrompt);
+    const userPrompt = montarPromptUsuario(resposta.resposta, criterios, contextoPergunta);
+    const bruto = await rodarAnalise(RUBRICA_SISTEMA, userPrompt);
     console.log("\n🧠 Resposta bruta do provedor:\n", bruto, "\n");
     let parsed;
     try {
