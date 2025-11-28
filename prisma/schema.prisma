@@ -34,3 +34,16 @@ model Analise {
   resultado    Json
   dataCriacao  DateTime    @default(now())
 }
+
+enum TipoUsuario {
+  USER
+  RECRUITER
+}
+
+model Usuario {
+  id          String      @id @default(cuid())
+  nome        String
+  email       String      @unique
+  senha       String
+  tipoUsuario TipoUsuario
+}
