@@ -91,11 +91,37 @@ router.post("/", async (req, res) => {
   const schema = z.object({
     candidato: z.string().min(1),
     resposta: z.string().min(1),
-    perguntaId: z.string().cuid()
+    perguntaId: z.string().cuid(),
+    usuarioId: z.string().cuid()
   });
 
   const dados = schema.parse(req.body);
-  const resposta = await prisma.resposta.create({ data: dados });
+
+  const pergunta = await prisma.pergunta.findUnique({
+    where: { id: dados.perguntaId }
+  });
+
+  if (!pergunta) {
+    return res.status(400).json({ erro: "Pergunta inexistente" });
+  }
+
+  const usuario = await prisma.usuario.findUnique({
+    where: { id: dados.usuarioId }
+  });
+
+  if (!usuario) {
+    return res.status(400).json({ erro: "Usuário inexistente" });
+  }
+
+  const resposta = await prisma.resposta.create({
+    data: {
+      candidato: dados.candidato,
+      resposta: dados.resposta,
+      perguntaId: dados.perguntaId,
+      usuarioId: dados.usuarioId
+    }
+  });
+
   res.json(resposta);
 });
 
@@ -117,7 +143,10 @@ router.post("/", async (req, res) => {
  */
 router.get("/", async (_req, res) => {
   const lista = await prisma.resposta.findMany({
-    include: { pergunta: true },
+    include: {
+      pergunta: true,
+      usuario: true
+    },
     orderBy: { dataCriacao: "desc" }
   });
   res.json(lista);
@@ -160,11 +189,18 @@ router.get("/", async (_req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const { id } = z.object({ id: z.string().cuid() }).parse(req.params);
+
     const resposta = await prisma.resposta.findUnique({
       where: { id },
-      include: { pergunta: true }
+      include: {
+        pergunta: true,
+        usuario: true
+      }
     });
-    if (!resposta) return res.status(404).json({ erro: "Resposta não encontrada" });
+
+    if (!resposta)
+      return res.status(404).json({ erro: "Resposta não encontrada" });
+
     res.json(resposta);
   } catch (e: any) {
     res.status(400).json({ erro: e.message });
@@ -204,10 +240,15 @@ router.get("/:id", async (req, res) => {
 router.get("/pergunta/:id", async (req, res) => {
   try {
     const { id } = z.object({ id: z.string().cuid() }).parse(req.params);
+
     const lista = await prisma.resposta.findMany({
       where: { perguntaId: id },
+      include: {
+        usuario: true
+      },
       orderBy: { dataCriacao: "desc" }
     });
+
     res.json(lista);
   } catch (e: any) {
     res.status(400).json({ erro: e.message });

@@ -5,7 +5,6 @@ import respostas from "./routes/respostas.js";
 import analisar from "./routes/analisar.js";
 import usuarioRouter from "./routes/usuario.js";
 
-
 import { setupSwagger } from './swagger';
 
 const app = express();

@@ -4,35 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-model Pergunta {
-  id           String      @id @default(cuid())
-  texto        String
-  tags         String[]    @default([])
-  dataCriacao  DateTime    @default(now())
-  respostas    Resposta[]
-}
-
-model Resposta {
-  id           String      @id @default(cuid())
-  candidato    String
-  resposta     String
-  dataCriacao  DateTime    @default(now())
-  perguntaId   String
-  pergunta     Pergunta    @relation(fields: [perguntaId], references: [id])
-  analises     Analise[]
-}
-
-model Analise {
-  id           String      @id @default(cuid())
-  respostaId   String
-  resposta     Resposta    @relation(fields: [respostaId], references: [id])
-  provider     String
-  modelo       String
-  resultado    Json
-  dataCriacao  DateTime    @default(now())
+  url      = "postgresql://neondb_owner:npg_vcILfil4Zu7C@ep-aged-mountain-ac04bqq5-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
 }
 
 enum TipoUsuario {
@@ -46,4 +18,47 @@ model Usuario {
   email       String      @unique
   senha       String
   tipoUsuario TipoUsuario
+
+  // relações
+  perguntas   Pergunta[]
+  respostas   Resposta[]
+}
+
+model Pergunta {
+  id           String      @id @default(cuid())
+  texto        String
+  tags         String[]    @default([])
+  dataCriacao  DateTime    @default(now())
+  respostas    Resposta[]
+
+  // vínculo com usuário (quem criou a pergunta)
+  usuarioId    String
+  usuario      Usuario     @relation(fields: [usuarioId], references: [id])
+}
+
+model Resposta {
+  id           String      @id @default(cuid())
+  candidato    String
+  resposta     String
+  dataCriacao  DateTime    @default(now())
+
+  // vínculo com pergunta
+  perguntaId   String
+  pergunta     Pergunta    @relation(fields: [perguntaId], references: [id])
+
+  analises     Analise[]
+
+  // vínculo com usuário (quem respondeu)
+  usuarioId    String
+  usuario      Usuario     @relation(fields: [usuarioId], references: [id])
+}
+
+model Analise {
+  id           String      @id @default(cuid())
+  respostaId   String
+  resposta     Resposta    @relation(fields: [respostaId], references: [id])
+  provider     String
+  modelo       String
+  resultado    Json
+  dataCriacao  DateTime    @default(now())
 }

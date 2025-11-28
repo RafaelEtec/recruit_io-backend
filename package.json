@@ -8,7 +8,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev --schema=./prisma/schema.prisma --dotenv=./.env",
+    "prisma:migrate": "prisma migrate",
     "prisma:deploy": "prisma migrate deploy",
     "db:push": "prisma db push",
     "postinstall": "prisma generate"
