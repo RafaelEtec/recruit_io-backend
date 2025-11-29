@@ -1,8 +1,10 @@
-import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
-import { z } from "zod";
-const prisma = new PrismaClient();
-const router = Router();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const client_1 = require("@prisma/client");
+const zod_1 = require("zod");
+const prisma = new client_1.PrismaClient();
+const router = (0, express_1.Router)();
 /**
  * @swagger
  * tags:
@@ -50,7 +52,7 @@ const router = Router();
  *           items:
  *             type: string
  *           description: Lista de tags associadas à pergunta
- *           example: ["logica", "javascript"]]
+ *           example: ["logica", "javascript"]
  *         usuarioId:
  *           type: string
  *           format: cuid
@@ -103,10 +105,10 @@ const router = Router();
  *               $ref: '#/components/schemas/Erro'
  */
 router.post("/", async (req, res) => {
-    const schema = z.object({
-        texto: z.string().min(5),
-        tags: z.array(z.string()).optional(),
-        usuarioId: z.string().cuid()
+    const schema = zod_1.z.object({
+        texto: zod_1.z.string().min(5),
+        tags: zod_1.z.array(zod_1.z.string()).optional(),
+        usuarioId: zod_1.z.string().cuid()
     });
     const dados = schema.parse(req.body);
     const usuario = await prisma.usuario.findUnique({
@@ -183,7 +185,7 @@ router.get("/", async (_req, res) => {
  */
 router.get("/:id", async (req, res) => {
     try {
-        const { id } = z.object({ id: z.string().cuid() }).parse(req.params);
+        const { id } = zod_1.z.object({ id: zod_1.z.string().cuid() }).parse(req.params);
         const pergunta = await prisma.pergunta.findUnique({
             where: { id },
             include: { usuario: true }
@@ -232,10 +234,10 @@ router.get("/:id", async (req, res) => {
  */
 router.put("/:id", async (req, res) => {
     try {
-        const params = z.object({ id: z.string().cuid() }).parse(req.params);
-        const body = z.object({
-            texto: z.string().min(5).optional(),
-            tags: z.array(z.string()).optional()
+        const params = zod_1.z.object({ id: zod_1.z.string().cuid() }).parse(req.params);
+        const body = zod_1.z.object({
+            texto: zod_1.z.string().min(5).optional(),
+            tags: zod_1.z.array(zod_1.z.string()).optional()
         }).parse(req.body);
         const pergunta = await prisma.pergunta.update({
             where: { id: params.id },
@@ -282,7 +284,7 @@ router.put("/:id", async (req, res) => {
  */
 router.delete("/:id", async (req, res) => {
     try {
-        const { id } = z.object({ id: z.string().cuid() }).parse(req.params);
+        const { id } = zod_1.z.object({ id: zod_1.z.string().cuid() }).parse(req.params);
         await prisma.pergunta.delete({ where: { id } });
         res.json({ sucesso: true });
     }
@@ -290,4 +292,4 @@ router.delete("/:id", async (req, res) => {
         res.status(400).json({ erro: e.message });
     }
 });
-export default router;
+exports.default = router;
