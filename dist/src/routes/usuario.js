@@ -1,9 +1,14 @@
-import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
-import { z } from "zod";
-import bcrypt from "bcryptjs";
-const prisma = new PrismaClient();
-const router = Router();
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const client_1 = require("@prisma/client");
+const zod_1 = require("zod");
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const prisma = new client_1.PrismaClient();
+const router = (0, express_1.Router)();
 /**
  * @swagger
  * tags:
@@ -100,20 +105,20 @@ const router = Router();
 /**
  * Schemas de validação (Zod)
  */
-const usuarioCreateSchema = z.object({
-    nome: z.string().min(3),
-    email: z.string().email(),
-    senha: z.string().min(6),
-    tipoUsuario: z.enum(["USER", "RECRUITER"])
+const usuarioCreateSchema = zod_1.z.object({
+    nome: zod_1.z.string().min(3),
+    email: zod_1.z.string().email(),
+    senha: zod_1.z.string().min(6),
+    tipoUsuario: zod_1.z.enum(["USER", "RECRUITER"])
 });
-const usuarioUpdateSchema = z.object({
-    nome: z.string().min(3).optional(),
-    email: z.string().email().optional(),
-    senha: z.string().min(6).optional(),
-    tipoUsuario: z.enum(["USER", "RECRUITER"]).optional()
+const usuarioUpdateSchema = zod_1.z.object({
+    nome: zod_1.z.string().min(3).optional(),
+    email: zod_1.z.string().email().optional(),
+    senha: zod_1.z.string().min(6).optional(),
+    tipoUsuario: zod_1.z.enum(["USER", "RECRUITER"]).optional()
 });
-const usuarioIdSchema = z.object({
-    id: z.string().cuid()
+const usuarioIdSchema = zod_1.z.object({
+    id: zod_1.z.string().cuid()
 });
 /**
  * @swagger
@@ -150,7 +155,7 @@ router.post("/", async (req, res) => {
         if (emailExiste) {
             return res.status(400).json({ erro: "E-mail já cadastrado." });
         }
-        const senhaHash = await bcrypt.hash(dados.senha, 10);
+        const senhaHash = await bcryptjs_1.default.hash(dados.senha, 10);
         const usuario = await prisma.usuario.create({
             data: {
                 nome: dados.nome,
@@ -192,9 +197,9 @@ router.post("/", async (req, res) => {
  *               $ref: '#/components/schemas/Erro'
  */
 router.post("/login", async (req, res) => {
-    const schema = z.object({
-        email: z.string().email(),
-        senha: z.string().min(6)
+    const schema = zod_1.z.object({
+        email: zod_1.z.string().email(),
+        senha: zod_1.z.string().min(6)
     });
     try {
         const { email, senha } = schema.parse(req.body);
@@ -204,7 +209,7 @@ router.post("/login", async (req, res) => {
         if (!usuario) {
             return res.status(400).json({ erro: "Usuário não encontrado." });
         }
-        const senhaOk = await bcrypt.compare(senha, usuario.senha);
+        const senhaOk = await bcryptjs_1.default.compare(senha, usuario.senha);
         if (!senhaOk) {
             return res.status(400).json({ erro: "Senha incorreta." });
         }
@@ -313,7 +318,7 @@ router.put("/:id", async (req, res) => {
         const dados = usuarioUpdateSchema.parse(req.body);
         let senhaHash;
         if (dados.senha) {
-            senhaHash = await bcrypt.hash(dados.senha, 10);
+            senhaHash = await bcryptjs_1.default.hash(dados.senha, 10);
         }
         const usuario = await prisma.usuario.update({
             where: { id },
@@ -357,4 +362,4 @@ router.delete("/:id", async (req, res) => {
         res.status(400).json({ erro: e.message });
     }
 });
-export default router;
+exports.default = router;

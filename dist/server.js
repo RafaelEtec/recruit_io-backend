@@ -1,7 +1,0 @@
-import "dotenv/config";
-import app from "./app.js";
-const PORT = Number(process.env.PORT || 3000);
-app.listen(PORT, () => {
-    console.log(`Recruit.io API (PT-BR) rodando na porta ${PORT}`);
-    console.log(`Swagger docs: http://localhost:${PORT}/api-docs`);
-});

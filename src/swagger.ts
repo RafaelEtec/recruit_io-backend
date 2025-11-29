@@ -16,23 +16,22 @@ const options = {
     ],
   },
   apis: [
-    path.resolve(__dirname, './routes/*.{ts,js}'),
-    path.resolve(__dirname, '../src/routes/*.{ts,js}')
+    path.join(process.cwd(), 'src/routes/*.{ts,js}'),
+    path.join(process.cwd(), 'dist/routes/*.{ts,js}')
   ],
 };
 
-const swaggerSpec = swaggerJsdoc(options);
-
 export function setupSwagger(app: Express) {
+  const swaggerSpec = swaggerJsdoc(options);
+
   app.get('/api-docs.json', (_req, res) => res.json(swaggerSpec));
 
   app.use(
     '/api-docs',
-    swaggerUi.serveFiles(swaggerSpec),
-    swaggerUi.setup(undefined, {
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, {
       explorer: true,
-      customSiteTitle: 'Recruit.io API Docs',
-      swaggerOptions: { url: '/api-docs.json' }
+      customSiteTitle: 'Recruit.io API Docs'
     })
   );
 }

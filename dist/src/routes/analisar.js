@@ -1,7 +1,9 @@
-import { Router } from "express";
-import { z } from "zod";
-import { analisarResposta } from "../services/avaliador.js";
-const router = Router();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const zod_1 = require("zod");
+const avaliador_js_1 = require("../services/avaliador.js");
+const router = (0, express_1.Router)();
 const criteriosEnum = [
     "criatividade",
     "fora_da_caixa",
@@ -97,14 +99,14 @@ const criteriosEnum = [
  *               $ref: '#/components/schemas/Erro'
  */
 router.post("/", async (req, res) => {
-    const schema = z.object({
-        respostaId: z.string().cuid(),
-        criterios: z.array(z.enum(criteriosEnum)).min(1),
-        contextoPergunta: z.string().optional()
+    const schema = zod_1.z.object({
+        respostaId: zod_1.z.string().cuid(),
+        criterios: zod_1.z.array(zod_1.z.enum(criteriosEnum)).min(1),
+        contextoPergunta: zod_1.z.string().optional()
     });
     const dados = schema.parse(req.body);
     try {
-        const resultado = await analisarResposta(dados.respostaId, dados.criterios, dados.contextoPergunta);
+        const resultado = await (0, avaliador_js_1.analisarResposta)(dados.respostaId, dados.criterios, dados.contextoPergunta);
         res.json(resultado);
     }
     catch (e) {
@@ -130,4 +132,4 @@ router.post("/", async (req, res) => {
 router.get("/criterios", (_req, res) => {
     res.json(criteriosEnum);
 });
-export default router;
+exports.default = router;
