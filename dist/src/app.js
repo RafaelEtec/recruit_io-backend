@@ -1,0 +1,23 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const perguntas_js_1 = __importDefault(require("./routes/perguntas.js"));
+const respostas_js_1 = __importDefault(require("./routes/respostas.js"));
+const analisar_js_1 = __importDefault(require("./routes/analisar.js"));
+const usuario_js_1 = __importDefault(require("./routes/usuario.js"));
+const docs_js_1 = require("./docs.js");
+const app = (0, express_1.default)();
+app.use((0, cors_1.default)());
+app.use(express_1.default.json());
+(0, docs_js_1.setupApiDocs)(app);
+app.get("/", (_req, res) => res.json({ message: "Recruit.io API online 🚀" }));
+app.get("/health", (_req, res) => res.json({ ok: true }));
+app.use("/api/usuarios", usuario_js_1.default);
+app.use("/api/perguntas", perguntas_js_1.default);
+app.use("/api/respostas", respostas_js_1.default);
+app.use("/api/analisar", analisar_js_1.default);
+exports.default = app;

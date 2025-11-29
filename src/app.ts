@@ -5,13 +5,13 @@ import respostas from "./routes/respostas.js";
 import analisar from "./routes/analisar.js";
 import usuarioRouter from "./routes/usuario.js";
 
-import { setupSwagger } from './swagger';
+import { setupApiDocs } from "./docs.js";
 
 const app = express();
-setupSwagger(app);
 
 app.use(cors());
 app.use(express.json());
+setupApiDocs(app);
 
 app.get("/", (_req, res) => res.json({ message: "Recruit.io API online 🚀" }));
 app.get("/health", (_req, res) => res.json({ ok: true }));

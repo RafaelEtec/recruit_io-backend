@@ -1,4 +1,7 @@
-export const RUBRICA_SISTEMA = `
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.montarPromptUsuario = exports.RUBRICA_SISTEMA = void 0;
+exports.RUBRICA_SISTEMA = `
 Você é um avaliador técnico de recrutamento. Avalie respostas segundo critérios e produza JSON estrito.
 
 ⚠️ Responda SOMENTE com JSON. Não adicione explicações, comentários, nem texto fora das chaves.
@@ -23,7 +26,7 @@ Formato:
   "notes": string[]
 }
 `;
-export const montarPromptUsuario = (respostaTexto, criterios, contexto) => `
+const montarPromptUsuario = (respostaTexto, criterios, contexto) => `
 Pergunta (contexto do avaliador, opcional):
 ${contexto ?? "(sem contexto adicional)"}
 
@@ -34,3 +37,4 @@ Critérios a pontuar (0-100): ${criterios.join(", ")}
 Calcule "overall" como média dos critérios.
 Se houver claro destaque em um único critério, rotule "destaque".
 `;
+exports.montarPromptUsuario = montarPromptUsuario;
