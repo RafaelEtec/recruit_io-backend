@@ -1,39 +1,47 @@
 <img width="1581" height="429" alt="Group 1(1)" src="https://github.com/user-attachments/assets/6086933a-34fc-4bc5-a56b-315584ae627c" />
 
-# 🧠 Recruit.io — Backend  
+# 🧠 Recruit.io - Backend
+
 API Inteligente para Avaliação de Entrevistas Técnicas
 
-O **Recruit.io** é uma plataforma projetada para ajudar **recrutadores** a avaliar respostas fornecidas por candidatos em processos seletivos técnicos. 
+O **Recruit.io** é uma plataforma criada para ajudar **recrutadores** e
+**empresas** a analisar respostas de candidatos durante entrevistas
+técnicas.\
+A API permite **gerenciar perguntas**, **registrar respostas** e
+realizar **avaliações automáticas usando IA (Google Gemini 2.5 Flash)**.
 
-O backend disponibiliza endpoints para gerenciar perguntas, respostas e análises automáticas utilizando modelos gratuitos da Google.
-
----
+------------------------------------------------------------------------
 
 ## 🚀 Tecnologias Utilizadas
-- **Node.js**
-- **TypeScript**
-- **Express**
-- **Prisma ORM**
-- **Neon PostgreSQL**
-- **Google Gemini 2.5 Flash**
-- **Zod** (validação de entrada)  
-- Deploy: **Vercel (Serverless Functions)**
 
----
+-   **Node.js**
+-   **TypeScript**
+-   **Express**
+-   **Prisma ORM**
+-   **Neon PostgreSQL**
+-   **Zod** (validação)
+-   **Google Gemini 2.5 Flash** (IA)
+-   Deploy em **Vercel --- Serverless Functions**
+
+------------------------------------------------------------------------
 
 ## 🌐 URL Base da API
-https://recruit-io-backend.vercel.app
 
----
+**https://recruit-io-backend.vercel.app**
+
+------------------------------------------------------------------------
 
 # 📡 Endpoints da API
-## 📁 Perguntas — `/api/perguntas`
+
+## 📁 Perguntas --- `/api/perguntas`
 
 ### **POST /api/perguntas**
+
 Cria uma nova pergunta.
 
-**Exemplo de body:**
-```json
+**Body exemplo:**
+
+``` json
 {
   "texto": "Explique o conceito de closures em JavaScript",
   "tags": ["logica", "javascript"]
@@ -41,37 +49,42 @@ Cria uma nova pergunta.
 ```
 
 ### **GET /api/perguntas**
+
 Retorna todas as perguntas cadastradas.
 
----
+------------------------------------------------------------------------
 
-## 📝 Respostas — `/api/respostas`
+## 📝 Respostas --- `/api/respostas`
 
 ### **POST /api/respostas**
+
 Registra a resposta de um candidato.
 
-**Exemplo de body:**
-```json
+**Body exemplo:**
+
+``` json
 {
   "candidato": "João da Silva",
   "perguntaId": "uuid-da-pergunta",
-  "resposta": "Resposta do candidato aqui..."
+  "resposta": "Minha resposta..."
 }
 ```
 
 ### **GET /api/respostas**
-Retorna todas as respostas enviadas.
 
----
+Retorna todas as respostas cadastradas.
 
-## 🤖 Analisar — `/api/analisar`
-Realiza análise automática da resposta usando IA (Google Gemini 2.5 Flash).
+------------------------------------------------------------------------
+
+## 🤖 Analisar --- `/api/analisar`
 
 ### **POST /api/analisar**
-Envia uma resposta para análise com base em critérios definidos.
 
-**Exemplo de body:**
-```json
+Realiza análise automática da resposta usando IA da Google.
+
+**Body exemplo:**
+
+``` json
 {
   "respostaId": "uuid-da-resposta",
   "criterios": ["criatividade", "clareza", "seguranca"],
@@ -80,82 +93,105 @@ Envia uma resposta para análise com base em critérios definidos.
 ```
 
 ### **GET /api/analisar**
-Endpoint simples que confirma o funcionamento do módulo de análise.
 
----
+Retorna confirmação de funcionamento do módulo de análise.
 
-## ❤️ Healthcheck — `/health`
-Retorna o status da API.
+------------------------------------------------------------------------
 
-**Exemplo de resposta:**
-```json
+## ❤️ Healthcheck --- `/health`
+
+**Resposta exemplo:**
+
+``` json
 { "status": "ok" }
 ```
 
----
+------------------------------------------------------------------------
 
-## 🧱 Estrutura do Projeto
-```
-src/
- ├── routes/
- │   ├── perguntas.ts
- │   ├── respostas.ts
- │   └── analisar.ts
- ├── providers/
- │   └── gemini.ts
- ├── prompts/
- │   └── rubrica.ts
- ├── tipos/
- ├── server.ts
- └── app.ts
-```
+# 🧱 Estrutura do Projeto
 
----
+    src/
+     ├── routes/
+     │   ├── perguntas.ts
+     │   ├── respostas.ts
+     │   └── analisar.ts
+     ├── providers/
+     │   └── gemini.ts
+     ├── prompts/
+     │   └── rubrica.ts
+     ├── tipos/
+     ├── server.ts
+     └── app.ts
 
-## 🛠️ Como Rodar Localmente
+------------------------------------------------------------------------
+
+# 🛠️ Como Rodar Localmente
 
 ### 1. Clone o repositório
-```bash
+
+``` bash
 git clone https://github.com/RafaelEtec/recruit_io-backend.git
 cd recruit_io-backend
 ```
+
 ### 2. Instale as dependências
-```bash
+
+``` bash
 npm install
 ```
-### 3. Crie e configure o arquivo .env
-```bash
+
+### 3. Configure o arquivo `.env`
+
+``` bash
+PORT=3000
 DATABASE_URL="postgres://..."
-GEMINI_API_KEY="sua-chave-aqui"
+GEMINI_API_KEY="sua-chave"
+GEMINI_MODEL="gemini-2.5-flash"
 ```
-## 4. Execute as migrações do banco
-```bash
+
+### 4. Execute as migrações do banco
+
+``` bash
 npx prisma migrate dev
 ```
-## 5. Inicie o servidor de desenvolvimento
-```bash
+
+### 5. Inicie o servidor
+
+``` bash
 npm run dev
 ```
 
----
+------------------------------------------------------------------------
+
+## 🔒 Variáveis de Ambiente Suportadas
+
+    PORT=
+    NODE_ENV=
+    DATABASE_URL=
+    AI_PROVIDER=
+    GEMINI_API_KEY=
+    GEMINI_MODEL=
+
+------------------------------------------------------------------------
 
 ## 🔮 Melhorias Futuras
 
-* Autenticação JWT para avaliadores
-* Sistema de ranking de candidatos
-* Painel administrativo (frontend)
-* Suporte para múltiplos avaliadores/empresas
-* Modelos próprios de IA (future fine-tuning)
+-   Autenticação JWT para avaliadores
+-   Painel administrativo (dashboard)
+-   Ranking de candidatos
+-   Suporte multiempresa
+-   Métricas avançadas de IA
+-   Fine-tuning de modelos no futuro
 
----
+------------------------------------------------------------------------
 
 ## 🤝 Contribuindo
-Contribuições são bem-vindas!
-Para sugestões, melhorias ou bugs, abra uma issue.
 
----
+Contribuições são bem-vindas!\
+Sinta-se livre para abrir issues ou enviar PRs.
+
+------------------------------------------------------------------------
 
 ## 📄 Licença
-Este projeto está sob a licença MIT.
 
----
+Este projeto está sob a licença **MIT**.
