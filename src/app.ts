@@ -5,10 +5,10 @@ import respostas from "./routes/respostas.js";
 import analisar from "./routes/analisar.js";
 import usuarioRouter from "./routes/usuario.js";
 
-import { setupSwagger } from './swagger';
+import { setupApiDocs } from './docs.js';
 
 const app = express();
-setupSwagger(app);
+setupApiDocs(app);
 
 app.use(cors());
 app.use(express.json());
