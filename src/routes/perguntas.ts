@@ -52,7 +52,7 @@ const router = Router();
  *           items:
  *             type: string
  *           description: Lista de tags associadas à pergunta
- *           example: ["logica", "javascript"]]
+ *           example: ["logica", "javascript"]
  *         usuarioId:
  *           type: string
  *           format: cuid

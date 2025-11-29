@@ -1,3 +1,4 @@
+import path from 'path';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { Express } from 'express';
@@ -14,11 +15,24 @@ const options = {
       { url: 'http://localhost:3000' }
     ],
   },
-  apis: ['./src/routes/*.ts'],
+  apis: [
+    path.resolve(__dirname, './routes/*.{ts,js}'),
+    path.resolve(__dirname, '../src/routes/*.{ts,js}')
+  ],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
 
 export function setupSwagger(app: Express) {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.get('/api-docs.json', (_req, res) => res.json(swaggerSpec));
+
+  app.use(
+    '/api-docs',
+    swaggerUi.serveFiles(swaggerSpec),
+    swaggerUi.setup(undefined, {
+      explorer: true,
+      customSiteTitle: 'Recruit.io API Docs',
+      swaggerOptions: { url: '/api-docs.json' }
+    })
+  );
 }
