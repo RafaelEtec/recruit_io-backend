@@ -12,7 +12,8 @@ const options = {
       description: 'Documentação da API Recruit.io-backend'
     },
     servers: [
-      { url: 'http://localhost:3000' }
+      { url: 'http://localhost:3000' },
+      { url: 'https://recruit-io-backend.vercel.app' }
     ],
   },
   apis: [
