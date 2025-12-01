@@ -37,20 +37,33 @@ realizar **avaliações automáticas usando IA (Google Gemini 2.5 Flash)**.
 
 ### **POST /api/perguntas**
 
-Cria uma nova pergunta.
+Cria uma nova pergunta vinculada a um usuário.
 
 **Body exemplo:**
 
 ``` json
 {
   "texto": "Explique o conceito de closures em JavaScript",
-  "tags": ["logica", "javascript"]
+  "tags": ["logica", "javascript"],
+  "usuarioId": "clyxxxxxxxxxxxxxxxxxxx"
 }
 ```
 
 ### **GET /api/perguntas**
 
-Retorna todas as perguntas cadastradas.
+Retorna todas as perguntas cadastradas (inclui dados do usuário).
+
+### **GET /api/perguntas/{id}**
+
+Retorna uma pergunta específica pelo seu ID.
+
+### **PUT /api/perguntas/{id}**
+
+Atualiza o texto ou as tags de uma pergunta existente.
+
+### **DELETE /api/perguntas/{id}**
+
+Remove uma pergunta pelo ID.
 
 ------------------------------------------------------------------------
 
@@ -58,7 +71,7 @@ Retorna todas as perguntas cadastradas.
 
 ### **POST /api/respostas**
 
-Registra a resposta de um candidato.
+Registra a resposta de um candidato para uma pergunta.
 
 **Body exemplo:**
 
@@ -66,13 +79,26 @@ Registra a resposta de um candidato.
 {
   "candidato": "João da Silva",
   "perguntaId": "uuid-da-pergunta",
-  "resposta": "Minha resposta..."
+  "resposta": "Minha resposta...",
+  "usuarioId": "clyxxxxxxxxxxxxxxxxxxx"
 }
 ```
 
 ### **GET /api/respostas**
 
-Retorna todas as respostas cadastradas.
+Retorna todas as respostas cadastradas com pergunta e usuário.
+
+### **GET /api/respostas/{id}**
+
+Retorna os detalhes de uma resposta específica.
+
+### **GET /api/respostas/pergunta/{id}**
+
+Lista respostas associadas a uma pergunta pelo ID da pergunta.
+
+### **DELETE /api/respostas/{id}**
+
+Remove uma resposta pelo ID.
 
 ------------------------------------------------------------------------
 
@@ -87,7 +113,7 @@ Realiza análise automática da resposta usando IA da Google.
 ``` json
 {
   "respostaId": "uuid-da-resposta",
-  "criterios": ["criatividade", "clareza", "seguranca"],
+  "criterios": ["criatividade", "clareza", "praticidade"],
   "contextoPergunta": "Contexto opcional da pergunta"
 }
 ```
@@ -95,6 +121,10 @@ Realiza análise automática da resposta usando IA da Google.
 ### **GET /api/analisar**
 
 Retorna confirmação de funcionamento do módulo de análise.
+
+### **GET /api/analisar/criterios**
+
+Lista os critérios disponíveis para avaliação (por exemplo: `criatividade`, `fora_da_caixa`, `praticidade`, `preocupacao_com_seguranca`, `clareza`, `aderencia_ao_tema`, `esforco`).
 
 ------------------------------------------------------------------------
 
