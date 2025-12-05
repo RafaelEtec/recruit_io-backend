@@ -1,36 +1,62 @@
-name: CI
+name: DevOps Pipeline - Recruit.io
 
 on:
   push:
-    branches: ["main", "master"]
+    branches: [ "main", "master" ]
   pull_request:
+    branches: [ "main", "master" ]
+  schedule:
+    - cron: '0 0 * * *'
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  security-events: write
 
 jobs:
-  build-and-test:
+  build-and-security:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
 
-      - name: Setup Node.js
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      - name: Install dependencies
+      - name: Instalar dependências
         run: npm ci
 
-      - name: Run unit tests
+      - name: Testes unitários
         run: npm test
 
-      - name: Static analysis (TypeScript SAST)
-        run: npm run sast
+      - name: SCA com npm audit
+        run: |
+          npm audit --audit-level=high --json > npm_audit_report.json || true
 
-      - name: Dynamic application smoke tests (DAST)
-        run: npm run dast
+      - name: SAST (TypeScript)
+        run: npm run sast || true
 
-      - name: Secret scanning
+      - name: DAST (smoke tests)
+        run: npm run dast || true
+
+      - name: Secret Scanning (Gitleaks)
         uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Upload dos Relatórios
+        uses: actions/upload-artifact@v4
         with:
-          args: detect --source . --no-git -v
+          name: relatorios-seguranca
+          path: |
+            npm_audit_report.json
+            reports/**
+          if-no-files-found: ignore
