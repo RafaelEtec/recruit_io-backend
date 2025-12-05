@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm test
+
+      - name: Static analysis (TypeScript SAST)
+        run: npm run sast
+
+      - name: Dynamic application smoke tests (DAST)
+        run: npm run dast
+
+      - name: Secret scanning
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          args: detect --source . --no-git -v
