@@ -1,9 +1,9 @@
 import express, { type Router } from "express";
 import cors from "cors";
-import perguntas from "./routes/perguntas.js";
-import respostas from "./routes/respostas.js";
-import analisar from "./routes/analisar.js";
-import { createUsuarioRouter } from "./routes/usuario.js";
+import perguntas from "./routes/perguntas";
+import respostas from "./routes/respostas";
+import analisar from "./routes/analisar";
+import { createUsuarioRouter } from "./routes/usuario";
 
 import { setupSwagger } from './swagger';
 

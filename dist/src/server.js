@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
-const app_js_1 = __importDefault(require("./app.js"));
+const app_1 = __importDefault(require("./app"));
 const PORT = Number(process.env.PORT || 3000);
-app_js_1.default.listen(PORT, () => {
+app_1.default.listen(PORT, () => {
     console.log(`Recruit.io API (PT-BR) rodando na porta ${PORT}`);
     console.log(`Swagger docs: http://localhost:${PORT}/api-docs`);
 });

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { z } from "zod";
-import { analisarResposta } from "../services/avaliador.js";
+import { analisarResposta } from "../services/avaliador";
 
 const router = Router();
 

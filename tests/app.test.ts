@@ -1,7 +1,7 @@
 import { AddressInfo } from "node:net";
 import bcrypt from "bcryptjs";
-import { createApp } from "../src/app.js";
-import { createUsuarioRouter } from "../src/routes/usuario.js";
+import { createApp } from "../src/app";
+import { createUsuarioRouter } from "../src/routes/usuario";
 
 type ServerInstance = ReturnType<ReturnType<typeof createApp>["listen"]>;
 
@@ -27,6 +27,10 @@ type MockPrisma = {
 const createMockPrisma = (): MockPrisma => {
   const usuarios: UsuarioRecord[] = [];
 
+  const gerarIdCuidLike = (index: number): string =>
+    //  base de um cuid + índice no final
+    `cku1b0xg80000x9l8v0h1234${index.toString(10)}`; // vira algo tipo cku1b0xg80000x9l8v0h12341
+
   return {
     usuario: {
       findUnique: async ({ where }) => {
@@ -41,7 +45,7 @@ const createMockPrisma = (): MockPrisma => {
       create: async ({ data }) => {
         const novoUsuario: UsuarioRecord = {
           ...data,
-          id: `usr_${usuarios.length + 1}`
+          id: gerarIdCuidLike(usuarios.length + 1)
         };
         usuarios.push(novoUsuario);
         return { ...novoUsuario };

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const zod_1 = require("zod");
-const avaliador_js_1 = require("../services/avaliador.js");
+const avaliador_1 = require("../services/avaliador");
 const router = (0, express_1.Router)();
 const criteriosEnum = [
     "criatividade",
@@ -106,7 +106,7 @@ router.post("/", async (req, res) => {
     });
     const dados = schema.parse(req.body);
     try {
-        const resultado = await (0, avaliador_js_1.analisarResposta)(dados.respostaId, dados.criterios, dados.contextoPergunta);
+        const resultado = await (0, avaliador_1.analisarResposta)(dados.respostaId, dados.criterios, dados.contextoPergunta);
         res.json(resultado);
     }
     catch (e) {
